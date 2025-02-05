@@ -1,0 +1,19 @@
+<Project>
+    <PropertyGroup>
+        <!-- NuGet Package Metadata -->
+        <PackageId>$(AssemblyName)</PackageId>
+        <Authors>QKP</Authors>
+        <Description>A library for generating unique, sortable, URL-friendly IDs</Description>
+        <PackageTags>id;generator;unique;sortable</PackageTags>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/qkp/ez-id</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/qkp/ez-id.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="/" />
+    </ItemGroup>
+</Project>

@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: 
+      - main
+      - 'feature/**'
+      - 'chore/**'
+      - 'fix/**'
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # Required for GitVersion
+        
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.10.2
+      with:
+        preferLatest: true
+        
+    - name: Determine Version
+      id: gitversion
+      uses: gittools/actions/gitversion/execute@v0.10.2
+      with:
+        useConfigFile: true
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --configuration Release --no-restore /p:Version=${{ steps.gitversion.outputs.semVer }}
+      
+    - name: Test
+      run: dotnet test --configuration Release --no-build --verbosity normal
+        
+    - name: Pack
+      if: github.event_name == 'release'
+      run: dotnet pack src/QKP.EzId/QKP.EzId.csproj --configuration Release --no-build --output nupkgs /p:Version=${{ steps.gitversion.outputs.semVer }}
+      
+    - name: Push to NuGet
+      if: github.event_name == 'release'
+      run: dotnet nuget push nupkgs/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
