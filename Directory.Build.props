@@ -1,19 +1,15 @@
 <Project>
-    <PropertyGroup>
-        <!-- NuGet Package Metadata -->
-        <PackageId>$(AssemblyName)</PackageId>
-        <Authors>QKP</Authors>
-        <Description>A library for generating unique, sortable, URL-friendly IDs</Description>
-        <PackageTags>id;generator;unique;sortable</PackageTags>
-        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/qkp/ez-id</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/qkp/ez-id.git</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    </PropertyGroup>
 
-    <ItemGroup>
-        <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="/" />
-    </ItemGroup>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <WarnOnPackingNonPackableProject>false</WarnOnPackingNonPackableProject>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+    <!-- Ignoring all satelite assemblies from external dependencies to reduce build artifact size. -->
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
 </Project>
