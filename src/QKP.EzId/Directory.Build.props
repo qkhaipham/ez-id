@@ -6,7 +6,7 @@
     <FileVersion>1.0.0.0</FileVersion>
     <InformationalVersion>1.0.0</InformationalVersion>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <!-- NuGet Package Metadata -->
     <PackageId>EzId</PackageId>
