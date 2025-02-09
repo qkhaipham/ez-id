@@ -2,8 +2,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
   
   <PropertyGroup>
+    <PackageId>QKP.EzId</PackageId>
+    <AssemblyName>QKP.EzId</AssemblyName>
     <TargetFrameworks>net9.0;net8.0;netstandard2.1</TargetFrameworks>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  
+  <PropertyGroup>
+    <Description>A library for generating unique, sortable, URL-friendly IDs</Description>
+    <PackageTags>id;generator;unique;sortable</PackageTags>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  
 
 </Project>
