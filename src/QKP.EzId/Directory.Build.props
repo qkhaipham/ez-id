@@ -11,8 +11,8 @@
     <!-- NuGet Package Metadata -->
     <Authors>Khai Pham</Authors>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/qkp/ez-id</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/qkp/ez-id.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/qkhaipham/ez-id</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/qkhaipham/ez-id.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
