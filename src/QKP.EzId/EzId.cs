@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+#if NET5_0_OR_GREATER
+using System.Text.Json.Serialization;
+using QKP.EzId.Json;
+#endif
 
 namespace QKP.EzId
 {
@@ -7,9 +11,13 @@ namespace QKP.EzId
     /// An identifier which encodes a 64-bit value with base32 crockford encoding
     /// to produce human friendly readable identifiers.
     ///
+    /// <example>
+    /// 07047XF6Q8YPA
+    /// </example>
     /// The identifier is a 13 character long string. (64 bits / 5 = 13)
     /// </summary>
-#if NET7_0_OR_GREATER
+#if NET5_0_OR_GREATER
+    [JsonConverter(typeof(EzIdJsonConverter))]
     public class EzId : IParsable<EzId>
 #else
     public class EzId
@@ -83,9 +91,10 @@ namespace QKP.EzId
         /// <summary>
         /// Parses a <see cref="string"/> value to an instance of <see cref="EzId"/>.
         /// </summary>
-        /// <param name="value">The <see cref="string"/> value.</param>
+        /// <param name="value">The <see cref="string"/> value to parse.</param>
+        /// <param name="formatProvider">The format provider.</param>
         /// <returns>The parsed <see cref="EzId"/> value.</returns>
-        public static EzId Parse(string value)
+        public static EzId Parse(string value, IFormatProvider? formatProvider = null)
         {
             return new EzId(Base32.Base32CrockFord.DecodeLong(value));
         }
@@ -95,18 +104,10 @@ namespace QKP.EzId
         /// </summary>
         /// <param name="value">The <see cref="string"/> value to parse.</param>
         /// <param name="provider">The format provider.</param>
-        /// <returns>The parsed <see cref="EzId"/> value.</returns>
-        public static EzId Parse(string value, IFormatProvider? provider) => Parse(value);
-
-        /// <summary>
-        /// Parses a <see cref="string"/> value to an instance of <see cref="EzId"/>.
-        /// </summary>
-        /// <param name="value">The <see cref="string"/> value to parse.</param>
-        /// <param name="provider">The format provider.</param>
         /// <param name="result">When this method returns, contains the parsed value if successful, otherwise a default value.</param>
         /// <returns>true if parsing succeeded; otherwise, false.</returns>
-        public static bool TryParse([NotNullWhen(true)] string? value, IFormatProvider? provider,
-            [MaybeNullWhen(false)] out EzId result)
+        public static bool TryParse(string? value, IFormatProvider? provider,
+            out EzId result)
         {
             if (string.IsNullOrEmpty(value))
             {
@@ -119,9 +120,6 @@ namespace QKP.EzId
         }
 
 #if NET7_0_OR_GREATER
-        // If you want to implement IParsable<EzId> explicitly,
-        // the signatures already match the ones above.
-        // You can also add explicit interface implementations if desired.
         static EzId IParsable<EzId>.Parse(string s, IFormatProvider? provider) => Parse(s, provider);
         static bool IParsable<EzId>.TryParse(string? s, IFormatProvider? provider, out EzId result) => TryParse(s, provider, out result!);
 #endif
