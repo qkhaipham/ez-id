@@ -17,4 +17,18 @@ string idString = id.ToString(); // Returns a 13-character base32 string, eg. "0
 
 // Parse from string
 EzId parsedId = EzId.Parse(idString);
+
+// Implement your own ID type, if you have multiple entities and want them to have own ID type
+public class FooId(long id) : EzId(id)
+{
+}
+
+// Create an FooIdGenerator with a unique generator ID (0-1023)
+var fooGenerator = new EzIdGenerator<FooId>(generatorId: 1);
+
+// Generate a new ID
+FooId fooId = fooGenerator.GetNextId();
+
+// Convert to string
+string fooIdString = fooId.ToString(); // Returns a 13-character base 32 string eg. "07047XF6Q8YPB"
 ```

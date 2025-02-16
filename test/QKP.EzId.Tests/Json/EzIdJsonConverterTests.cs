@@ -40,4 +40,4 @@ public class EzIdJsonConverterTests
     }
 }
 
-public record Person(EzId Id, string Name);
+internal record Person(EzId Id, string Name);
