@@ -14,20 +14,20 @@ namespace QKP.EzId.Tests
         [Fact]
         public void When_generating_it_must_return_expected()
         {
-            // ACT
+            // Act
             long id = _idGenerator.GetNextId();
 
-            // ASSERT
+            // Assert
             id.Should().BeGreaterThan(0);
         }
 
         [Fact]
         public void When_generating_multiple_ids_it_must_return_expected()
         {
-            // ACT
+            // Act
             var ids = Enumerable.Range(0, 1000).Select(_ => _idGenerator.GetNextId()).ToList();
 
-            // ASSERT
+            // Assert
             ids.Should().NotBeEmpty();
             ids.Should().OnlyHaveUniqueItems();
         }
@@ -37,10 +37,10 @@ namespace QKP.EzId.Tests
         [InlineData(1024)]
         public void When_generator_id_is_out_of_range_it_must_throw_exception(long generatorId)
         {
-            // ACT
+            // Act
             Action act = () => new IdGenerator(generatorId);
 
-            // ASSERT
+            // Assert
             if (generatorId is < 1 or > 1024)
             {
                 act.Should().Throw<ArgumentOutOfRangeException>();
@@ -51,36 +51,22 @@ namespace QKP.EzId.Tests
             }
         }
 
-        // [Fact]
-        // public void When_clock_moves_backwards_it_must_throw_exception()
-        // {
-        //     // arrange
-        //     var idGenerator = new IdGenerator(1);
-        //     typeof(IdGenerator).GetField("_lastTick", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-        //         .SetValue(idGenerator, IdGenerator.GetTick() + 1000);
-        //
-        //     // ACT
-        //     Action act = () => idGenerator.GetNextId();
-        //
-        //     // ASSERT
-        //     act.Should().Throw<DayLightSavingChangedException>();
-        // }
-
         [Fact]
         public void When_generating_max_sequence_in_same_millisecond_it_must_handle_correctly()
         {
             var idGenerator = new IdGenerator(1);
             var ids = new List<long>();
 
-            // ACT & ASSERT
-            // Generate 4096 IDs (max sequence number) + 1 more
-            for (int i = 0; i < 4097; i++)
+            // ACT
+            // Generate 4097 IDs (max sequence number) + 1 more
+            for (int i = 0; i < 4096 + 1; i++)
             {
                 long id = idGenerator.GetNextId();
                 ids.Contains(id).Should().BeFalse($"{i}");
                 ids.Add(id);
             }
 
+            ids.Count.Should().Be(4097);
             long firstId = ids.First();
             long lastId = ids.Last();
             long firstTimestamp = firstId >> (10 + 12); // 10 for GeneratorId, 12 for Sequence
@@ -97,7 +83,7 @@ namespace QKP.EzId.Tests
             var ids = new ConcurrentBag<long>();
             var tasks = new List<Task>();
 
-            // ACT
+            // Act
             for (int i = 0; i < numThreads; i++)
             {
                 tasks.Add(Task.Run(() =>
@@ -110,23 +96,22 @@ namespace QKP.EzId.Tests
             }
             await Task.WhenAll(tasks);
 
-            // ASSERT
+            // Assert
             ids.Should().HaveCount(numThreads * idsPerThread);
             ids.Distinct().Should().HaveCount(numThreads * idsPerThread);
         }
 
         [Fact]
-        public void When_generating_ids_bit_structure_must_be_correct()
+        public void When_generating_ids_then_bit_structure_must_be_correct()
         {
             const long generatorId = 123;
             var idGenerator = new IdGenerator(generatorId);
 
-            // ACT
+            // Act
             long id = idGenerator.GetNextId();
 
-            // ASSERT
-            // Extract components using bit operations
-            long timestamp = (id >> 22); // 41 bits for timestamp (after first unused bit)
+            // Assert
+            long timestamp = id >> 22; // 41 bits for timestamp (after first unused bit)
             long extractedGeneratorId = (id >> 12) & 0x3FF; // 10 bits for generator ID
             long sequence = id & 0xFFF; // 12 bits for sequence
 
@@ -148,7 +133,7 @@ namespace QKP.EzId.Tests
                 .ToList();
             var ids = new ConcurrentBag<long>();
 
-            // ACT
+            // Act
             await Task.WhenAll(generators.Select(generator => Task.Run(() =>
             {
                 for (int i = 0; i < idsPerGenerator; i++)
@@ -157,9 +142,49 @@ namespace QKP.EzId.Tests
                 }
             })).ToArray());
 
-            // ASSERT
+            // Assert
             ids.Should().HaveCount(numGenerators * idsPerGenerator);
             ids.Distinct().Should().HaveCount(numGenerators * idsPerGenerator);
+        }
+
+        [Fact]
+        public void When_clock_moves_backwards_it_must_throw_exception()
+        {
+            // Arrange
+            var tickProvider = new StubTickProvider(1000);
+            var idGenerator = new IdGenerator(1, tickProvider);
+            
+            // First call to establish last tick
+            idGenerator.GetNextId();
+            
+            // Simulate clock moving backwards
+            tickProvider.SetTick(500);
+
+            // Act
+            Action act = () => idGenerator.GetNextId();
+
+            // Assert
+            act.Should().Throw<DayLightSavingChangedException>();
+        }
+    }
+
+    internal class StubTickProvider : ITickProvider
+    {
+        private long _currentTick;
+
+        public StubTickProvider(long initialTick)
+        {
+            _currentTick = initialTick;
+        }
+
+        public void SetTick(long tick)
+        {
+            _currentTick = tick;
+        }
+
+        public long GetTick()
+        {
+            return _currentTick;
         }
     }
 }

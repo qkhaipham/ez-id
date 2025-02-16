@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Threading;
 
 namespace QKP.EzId
@@ -8,7 +7,7 @@ namespace QKP.EzId
     /// A predictable 64 bits snowflake inspired ID generator.
     ///
     /// The first bit is not used.
-    /// The next 41 bits are used to store the timestamp in milliseconds since <see cref="s_epoch"/>.
+    /// The next 41 bits are used to store the timestamp in milliseconds since epoch.
     /// The next 10 bits ( max 1024 unique generators ) are used to store the generatorId.
     /// And the last 12 bits ( max 4096 ) are used to store the sequence.
     /// </summary>
@@ -28,29 +27,31 @@ namespace QKP.EzId
         private const int MaxSequence = (1 << SequenceBits) - 1;
         private const int MaxGeneratorId = 1 << GeneratorIdBits;
         private readonly object _lockObject = new object();
+        private readonly ITickProvider _tickProvider;
         private long _sequence;
-        private long _initializedTicksInMs;
         private long _lastTick;
-        private Stopwatch _stopWatch = new Stopwatch();
 
         /// <summary>
         /// Constructs an instance of <see cref="IdGenerator"/>.
         /// </summary>
         /// <param name="generatorId">The generator ID which must be a unique identifier for each concurrent processor.</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the generator ID is out of range.</exception>
-        public IdGenerator(long generatorId)
+        public IdGenerator(long generatorId) : this(generatorId, new StopwatchTickProvider())
+        {
+        }
+
+
+        internal IdGenerator(long generatorId, ITickProvider tickProvider)
         {
             if (generatorId < 0 || generatorId > MaxGeneratorId)
             {
                 throw new ArgumentOutOfRangeException(nameof(generatorId), generatorId, $"Generator ID must be less than {MaxGeneratorId}.");
             }
 
+            _tickProvider = tickProvider;
             GeneratorId = generatorId;
-            _lastTick = _initializedTicksInMs = (long)(DateTimeOffset.UtcNow - s_epoch).TotalMilliseconds;
-            _stopWatch.Start();
+            _lastTick = _tickProvider.GetTick();
         }
-
-        private static readonly DateTimeOffset s_epoch = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
 
         /// <summary>
         /// Gets the next identifier.
@@ -61,7 +62,7 @@ namespace QKP.EzId
         {
             lock (_lockObject)
             {
-                long now = GetTick();
+                long now = _tickProvider.GetTick();
                 if (now > _lastTick)
                 {
                     _lastTick = now;
@@ -75,18 +76,13 @@ namespace QKP.EzId
 
                 if (_sequence == MaxSequence)
                 {
-                    SpinWait.SpinUntil(() => _lastTick < GetTick());
+                    SpinWait.SpinUntil(() => _lastTick < _tickProvider.GetTick());
                     return GetNextId();
                 }
 
                 _sequence++;
                 return _lastTick << ShiftByForTimestamp | (GeneratorId << SequenceBits) | _sequence;
             }
-        }
-
-        private long GetTick()
-        {
-            return _initializedTicksInMs + _stopWatch.ElapsedTicks / TimeSpan.TicksPerMillisecond;
         }
     }
 }

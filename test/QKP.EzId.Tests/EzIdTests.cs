@@ -4,12 +4,16 @@ namespace QKP.EzId.Tests
 {
     public class EzIdTests
     {
-        [Fact]
-        public void Given_string_when_encoding_it_must_return_expected()
+        [Theory]
+        [InlineData(123456789, "2Q6NP1R000000")]
+        [InlineData(987654321, "P5MDWEG000000")]
+        [InlineData(long.MaxValue, "ZZZZZZZZZZZQY")]
+        [InlineData(long.MinValue, "0000000000080")]
+        public void Given_string_when_encoding_it_must_return_expected(long value, string expected)
         {
-            var ezId = new EzId(1);
-            ezId.Value.Should().Be(1);
-            ezId.ToString().Should().Be("0400000000000");
+            var ezId = new EzId(value);
+            ezId.Value.Should().Be(value);
+            ezId.ToString().Should().Be(expected);
         }
 
         [Fact]

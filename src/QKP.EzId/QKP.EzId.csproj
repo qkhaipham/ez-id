@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  
+
   <PropertyGroup>
     <PackageId>QKP.EzId</PackageId>
     <AssemblyName>QKP.EzId</AssemblyName>
     <TargetFrameworks>net9.0;net8.0;netstandard2.1</TargetFrameworks>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <Description>
       EzId is a lightweight .NET library for generating unique, sortable, and human-friendly readable identifiers. It implements a 64 bit long ID generation algorithm inspired by Twitter Snowflake
@@ -15,10 +15,17 @@
     </Description>
     <PackageTags>id;generator;unique;sortable;snowflake;base32;crockford</PackageTags>
   </PropertyGroup>
-  
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="QKP.EzId.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
-  
 
 </Project>
