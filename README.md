@@ -1,6 +1,7 @@
 # EzId
 
-EzId is a lightweight .NET library for generating unique, sortable, and human-friendly identifiers. It implements a Snowflake-inspired ID generation algorithm that produces 13-character base32 encoded strings.
+EzId is a lightweight .NET library for generating unique, sortable, and human-friendly readable identifiers that look like "070-47XF6Q8-YPB". It implements a 64 bit long ID generation algorithm inspired by Twitter Snowflake
+and comes packed with a value type that encodes it in a 15-character base32 string.
 
 ## Features
 
@@ -39,7 +40,7 @@ var generator = new EzIdGenerator<EzId>(generatorId: 1);
 EzId id = generator.GetNextId();
 
 // Convert to string
-string idString = id.ToString(); // Returns a 13-character base32 string eg. "07047XF6Q8YPA"
+string idString = id.ToString(); // Returns a 15-character base32 string eg. "070-47XF6Q8-YPA"
 
 // Parse from string
 EzId parsedId = EzId.Parse(idString);
@@ -56,7 +57,7 @@ var fooGenerator = new EzIdGenerator<FooId>(generatorId: 1);
 FooId fooId = fooGenerator.GetNextId();
 
 // Convert to string
-string fooIdString = fooId.ToString(); // Returns a 13-character base 32 string eg. "07047XF6Q8YPB"
+string fooIdString = fooId.ToString(); // Returns a 15-character base 32 string eg. "070-47XF6Q8-YPB"
 
 ```
 
@@ -82,6 +83,7 @@ var node2Generator = new EzIdGenerator<EzId>(generatorId: 2);  // For Node 2
 ### ID Structure
 
 Each generated ID consists of:
+- 1 bit unused 
 - 41 bits for timestamp (milliseconds since epoch)
 - 10 bits for generator ID (0-1023)
 - 12 bits for sequence number (0-4095)

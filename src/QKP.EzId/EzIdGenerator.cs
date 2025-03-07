@@ -21,8 +21,8 @@ namespace QKP.EzId
         /// <summary>
         /// Gets the next identifier.
         /// </summary>
-        /// <returns>Aninstance of type T.</returns>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <returns>An instance of type T.</returns>
+        /// <exception cref="InvalidOperationException">Thrown when instance of type T could not be created.</exception>
         public virtual T GetNextId()
         {
             return (T)Activator.CreateInstance(typeof(T), _generator.GetNextId())! ?? throw new InvalidOperationException($"Could not construct type {typeof(T).FullName}.");

@@ -11,6 +11,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{E891878A-998D-452B-9E2F-DF8933E9F8B5}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		GitVersion.yml = GitVersion.yml
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{9FA04897-CDE6-4A9D-A094-A4BC7D7DFB33}"

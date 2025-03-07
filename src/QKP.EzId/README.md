@@ -13,7 +13,7 @@ var generator = new EzIdGenerator<EzId>(generatorId: 1);
 EzId id = generator.GetNextId();
 
 // Convert to string
-string idString = id.ToString(); // Returns a 13-character base32 string, eg. "07047XF6Q8YPA"
+string idString = id.ToString(); // Returns a 13-character base32 string, eg. "070-47XF6Q8-YPA"
 
 // Parse from string
 EzId parsedId = EzId.Parse(idString);
@@ -30,5 +30,5 @@ var fooGenerator = new EzIdGenerator<FooId>(generatorId: 1);
 FooId fooId = fooGenerator.GetNextId();
 
 // Convert to string
-string fooIdString = fooId.ToString(); // Returns a 13-character base 32 string eg. "07047XF6Q8YPB"
+string fooIdString = fooId.ToString(); // Returns a 13-character base 32 string eg. "070-47XF6Q8-YPB"
 ```
