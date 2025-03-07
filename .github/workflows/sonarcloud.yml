@@ -63,7 +63,7 @@ jobs:
           run: |
             echo "GITHUB_REPOSITORY_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
             echo "SONAR_PROJECT_KEY=${GITHUB_REPOSITORY_OWNER}_${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
-            echo "SONAR_ORG_KEY=${GITHUB_REPOSITORY_OWNER}" >> $GITHUB_ENV
+            echo "SONAR_ORG_KEY=${{ vars.SONAR_ORG_KEY }}" >> $GITHUB_ENV
   
         - name: SonarCloud PR config
           if: github.event_name == 'pull_request_target'
