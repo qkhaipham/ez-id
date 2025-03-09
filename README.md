@@ -6,8 +6,8 @@ and comes packed with a value type that encodes it in a 15-character base32 stri
 ---
 
 [![Main workflow](https://github.com/qkhaipham/ezid/actions/workflows/main.yml/badge.svg)](https://github.com/qkhaipham/ezid/actions/workflows/main.yml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=qkhaipham_ez-id&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=qkhaipham_ez-id)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=qkhaipham_ez-id&metric=coverage)](https://sonarcloud.io/component_measures?id=qkhaipham_ez-id&metric=coverage)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=qkhaipham_EzId&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=qkhaipham_EzId)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=qkhaipham_EzId&metric=coverage)](https://sonarcloud.io/component_measures?id=qkhaipham_EzId&metric=coverage)
 
 | | |
 |---|---|
