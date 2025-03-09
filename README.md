@@ -1,7 +1,17 @@
 # EzId
 
-EzId is a lightweight .NET library for generating unique, sortable, and human-friendly readable identifiers that look like "070-47XF6Q8-YPB". It implements a 64 bit long ID generation algorithm inspired by Twitter Snowflake
+EzId is a lightweight .NET library for generating unique, sortable, and human-friendly readable identifiers that look for example like: `070-47XF6Q8-YPB`. It implements a 64 bit long ID generation algorithm inspired by Twitter Snowflake
 and comes packed with a value type that encodes it in a 15-character base32 string.
+
+---
+
+[![Main workflow](https://github.com/qkhaipham/ez-id/actions/workflows/main.yml/badge.svg)](https://github.com/qkhaipham/ez-id/actions/workflows/main.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=qkhaipham_ez-id&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=qkhaipham_ez-id)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=qkhaipham_ez-id&metric=coverage)](https://sonarcloud.io/component_measures?id=qkhaipham_ez-id&metric=coverage)
+
+| | |
+|---|---|
+| `QKP.EzId` | [![NuGet](https://img.shields.io/nuget/v/QKP.EzId.svg)](https://www.nuget.org/packages/QKP.EzId/) [![NuGet](https://img.shields.io/nuget/dt/QKP.EzId.svg)](https://www.nuget.org/packages/QKP.EzId/) |
 
 ## Features
 
@@ -19,12 +29,6 @@ and comes packed with a value type that encodes it in a 15-character base32 stri
 ```bash
 dotnet add package QKP.EzId
 ```
-
-### Using NuGet Package Manager
-
-1. Open the NuGet Package Manager in Visual Studio
-2. Search for `QKP.EzId`
-3. Click "Install"
 
 ## Usage
 
